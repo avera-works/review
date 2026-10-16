@@ -14,7 +14,7 @@
     header.hero{position:relative;overflow:hidden;min-height:330px;border-radius:30px;margin:0 auto 26px;display:flex;align-items:center;justify-content:center;text-align:center;padding:36px 22px;background:linear-gradient(90deg,rgba(247,238,255,.83),rgba(235,223,255,.55)),url('avera-hero.png') center 43%/cover;border:1px solid #fff;box-shadow:0 20px 60px #8c6bd52b}
     header.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(247,240,255,.78),rgba(247,240,255,.08) 75%)}
     .hero-content{position:relative;z-index:1;max-width:660px}
-    .mark{display:block;width:86px;height:86px;object-fit:cover;border:1px solid #a78bfa;border-radius:22px;box-shadow:0 0 34px #9b4dff66,0 0 12px #4e8cff44;margin:auto}
+    .mark{display:inline-grid;place-items:center;width:58px;height:58px;border:1px solid #fff;border-radius:20px;color:white;font-size:30px;font-weight:800;box-shadow:0 0 28px #9b4dff55;background:linear-gradient(145deg,#a64cff,#5478ed)}
     h1{font-size:clamp(27px,4vw,42px);margin:13px 0 8px;letter-spacing:.4px;color:#402365;text-shadow:0 1px #fff}
     header p{color:#5c4a78;margin:0;line-height:1.9;font-size:16px}
     .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);gap:22px;align-items:start}
@@ -49,7 +49,7 @@
   <main class="wrap">
     <header class="hero">
       <div class="hero-content">
-        <img class="mark" src="avera-logo.png" alt="شعار AVERA">
+        <div class="mark" aria-label="AVERA">A</div>
         <h1>AVERA Review Studio</h1>
         <p>كل تجربة جميلة تستحق أن تُروى ✨<br>شاركنا رأيك، وأنشئ بطاقة تقييم مستوحاة من عالم AVERA البنفسجي.</p>
       </div>
@@ -108,7 +108,7 @@
 <script>
   // رقم واتساب AVERA بصيغة دولية، دون + أو مسافات.
   const AVERA_WHATSAPP_NUMBER = "966596240060";
-  const logoImage = new Image();\n  logoImage.src = "avera-logo.png";\n  const canvas = document.getElementById("reviewCanvas");
+  const canvas = document.getElementById("reviewCanvas");
   const ctx = canvas.getContext("2d");
   const statusEl = document.getElementById("status");
   let rating = 5;
@@ -137,19 +137,11 @@
     border.addColorStop(0,"#bda2ff");border.addColorStop(.5,"#4d75ff");border.addColorStop(1,"#8f55ff");
     ctx.strokeStyle=border;ctx.lineWidth=3;roundRect(46,46,988,1258,42);ctx.stroke();
 
-    // Official AVERA neon logo image
-    if (logoImage.complete && logoImage.naturalWidth) {
-      ctx.save();
-      ctx.shadowColor = "rgba(143,72,255,.55)";
-      ctx.shadowBlur = 28;
-      ctx.drawImage(logoImage, 455, 78, 170, 170);
-      ctx.restore();
-    } else {
-      const lg=ctx.createLinearGradient(465,90,615,235);lg.addColorStop(0,"#8d4bff");lg.addColorStop(1,"#236eff");
-      ctx.fillStyle=lg;roundRect(468,92,144,144,34);ctx.fill();
-      ctx.fillStyle="#fff";ctx.font="bold 100px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("A",540,163);
-    }
-    ctx.fillStyle="#fff";ctx.font="bold 48px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("AVERA",540,304);
+    // Logo mark
+    const lg=ctx.createLinearGradient(465,90,615,235);lg.addColorStop(0,"#8d4bff");lg.addColorStop(1,"#236eff");
+    ctx.fillStyle=lg;roundRect(468,92,144,144,34);ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="bold 100px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("A",540,163);
+    ctx.fillStyle="#fff";ctx.font="bold 48px Arial";ctx.fillText("AVERA",540,304);
     ctx.fillStyle="#bfc4ff";ctx.font="26px Arial";ctx.fillText("YOUR EXPERIENCE MATTERS",540,355);
 
     // Stars
