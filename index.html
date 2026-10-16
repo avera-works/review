@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d9c5ff">
+  <meta name="description" content="شارك تجربتك مع AVERA وأنشئ بطاقة تقييم جميلة قابلة للمشاركة.">
+  <title>AVERA Review Studio</title>
+  <style>
+    :root{--bg:#f2eaff;--panel:rgba(255,255,255,.76);--purple:#9b4dff;--blue:#6c8dff;--text:#31234d;--muted:#716588;--gold:#ffca65}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 10% 5%,#fff 0,transparent 38%),linear-gradient(145deg,#f7edff 0%,#e7dcff 48%,#dce9ff 100%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+    .wrap{width:min(1120px,100%);margin:auto;padding:22px 18px 44px}
+    header.hero{position:relative;overflow:hidden;min-height:330px;border-radius:30px;margin:0 auto 26px;display:flex;align-items:center;justify-content:center;text-align:center;padding:36px 22px;background:linear-gradient(90deg,rgba(247,238,255,.83),rgba(235,223,255,.55)),url('avera-hero.png') center 43%/cover;border:1px solid #fff;box-shadow:0 20px 60px #8c6bd52b}
+    header.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(247,240,255,.78),rgba(247,240,255,.08) 75%)}
+    .hero-content{position:relative;z-index:1;max-width:660px}
+    .mark{display:block;width:86px;height:86px;object-fit:cover;border:1px solid #a78bfa;border-radius:22px;box-shadow:0 0 34px #9b4dff66,0 0 12px #4e8cff44;margin:auto}
+    h1{font-size:clamp(27px,4vw,42px);margin:13px 0 8px;letter-spacing:.4px;color:#402365;text-shadow:0 1px #fff}
+    header p{color:#5c4a78;margin:0;line-height:1.9;font-size:16px}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);gap:22px;align-items:start}
+    .panel{background:var(--panel);backdrop-filter:blur(14px);border:1px solid #fff;border-radius:24px;padding:22px;box-shadow:0 18px 50px #7254a31a}
+    h2{font-size:19px;margin:0 0 18px;color:#4b2b70}
+    label{display:block;font-size:14px;color:#514064;margin:15px 0 8px}
+    input,textarea,select{width:100%;background:rgba(255,255,255,.84);border:1px solid #d8c9f0;border-radius:13px;padding:13px 14px;color:#38264f;font:inherit;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:#a66cff;box-shadow:0 0 0 3px #9b4dff20}
+    textarea{resize:vertical;min-height:112px;line-height:1.7}
+    .stars{display:flex;gap:8px;direction:ltr;justify-content:flex-end}
+    .star{border:0;background:transparent;color:#c7bdd8;font-size:35px;cursor:pointer;padding:0;line-height:1}
+    .star.active{color:var(--gold);filter:drop-shadow(0 0 8px #ffca6555)}
+    .hint{font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px}
+    .check{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#594a6d;line-height:1.7;margin-top:15px}
+    .check input{width:auto;margin-top:4px;accent-color:var(--purple)}
+    .buttons{display:grid;gap:10px;margin-top:20px}
+    button.action{border:0;border-radius:13px;padding:14px 16px;font:inherit;font-weight:700;cursor:pointer;transition:transform .18s,box-shadow .18s}
+    button.action:hover{transform:translateY(-1px)}
+    .primary{color:white;background:linear-gradient(100deg,#a24bff,#6486ff);box-shadow:0 8px 24px #8952ff30}
+    .secondary{background:#f2eaff;color:#55357b;border:1px solid #d9c9f1!important}
+    .preview{position:sticky;top:18px}
+    .preview-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}
+    .preview-title h2{margin:0}
+    .tag{font-size:11px;border:1px solid #d6c2f4;border-radius:999px;padding:5px 9px;color:#76539b;background:#fff9}
+    canvas{width:100%;height:auto;display:block;border-radius:16px;border:1px solid #fff;background:#eee3ff;box-shadow:0 8px 24px #7555a31a}
+    .status{font-size:13px;color:#6a5685;line-height:1.7;min-height:22px;margin-top:12px}
+    footer{text-align:center;color:#786991;font-size:12px;margin-top:24px;line-height:1.8}
+    @media(max-width:760px){.layout{grid-template-columns:1fr}.preview{position:static}.wrap{padding:12px 10px 28px}.panel{padding:17px}header.hero{min-height:290px;border-radius:22px;background-position:58% center}.hero-content{background:#f8f2ff9c;border:1px solid #fff9;border-radius:22px;padding:20px 12px;backdrop-filter:blur(5px)}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="hero-content">
+        <img class="mark" src="avera-logo.png" alt="شعار AVERA">
+        <h1>AVERA Review Studio</h1>
+        <p>كل تجربة جميلة تستحق أن تُروى ✨<br>شاركنا رأيك، وأنشئ بطاقة تقييم مستوحاة من عالم AVERA البنفسجي.</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>اكتب تقييمك</h2>
+        <form id="reviewForm">
+          <label for="customerName">الاسم (اختياري)</label>
+          <input id="customerName" maxlength="45" placeholder="مثال: سارة">
+
+          <label for="service">الخدمة</label>
+          <input id="service" maxlength="70" placeholder="مثال: تصميم هوية بصرية" required>
+
+          <label>تقييمك</label>
+          <div class="stars" role="group" aria-label="اختر عدد النجوم">
+            <button class="star active" type="button" data-rating="1" aria-label="نجمة واحدة">★</button>
+            <button class="star active" type="button" data-rating="2" aria-label="نجمتان">★</button>
+            <button class="star active" type="button" data-rating="3" aria-label="ثلاث نجوم">★</button>
+            <button class="star active" type="button" data-rating="4" aria-label="أربع نجوم">★</button>
+            <button class="star active" type="button" data-rating="5" aria-label="خمس نجوم">★</button>
+          </div>
+
+          <label for="reviewText">رأيك في تجربتك</label>
+          <textarea id="reviewText" maxlength="420" placeholder="أخبرنا ما الذي أعجبك في تجربتك مع AVERA..." required></textarea>
+          <div class="hint">فضلاً لا تكتب معلومات شخصية أو بيانات سرية داخل التقييم.</div>
+
+          <label class="check">
+            <input id="publishConsent" type="checkbox">
+            <span>أوافق على إمكانية مشاركة نص تقييمي في حسابات AVERA. (اختياري)</span>
+          </label>
+
+          <div class="buttons">
+            <button class="action primary" type="submit">إنشاء بطاقة التقييم</button>
+            <button class="action secondary" id="downloadBtn" type="button">تنزيل البطاقة PNG</button>
+            <button class="action secondary" id="shareBtn" type="button">مشاركة البطاقة</button>
+            <button class="action secondary" id="whatsappBtn" type="button">إرسال ملخص التقييم إلى واتساب AVERA</button>
+          </div>
+          <p class="hint">بعد فتح واتساب، أرفقي صورة البطاقة التي تم تنزيلها لإرسالها مع التقييم.</p>
+        </form>
+      </section>
+
+      <section class="panel preview">
+        <div class="preview-title">
+          <h2>معاينة البطاقة</h2>
+          <span class="tag">1080 × 1350</span>
+        </div>
+        <canvas id="reviewCanvas" width="1080" height="1350" aria-label="معاينة بطاقة التقييم"></canvas>
+        <div class="status" id="status" aria-live="polite">اكتبي تقييمك ثم اضغطي «إنشاء بطاقة التقييم».</div>
+      </section>
+    </div>
+    <footer>AVERA · Design your next possibility<br>هذه نسخة أولية تعمل في المتصفح؛ لا تحفظ التقييمات على خادم.</footer>
+  </main>
+
+<script>
+  // رقم واتساب AVERA بصيغة دولية، دون + أو مسافات.
+  const AVERA_WHATSAPP_NUMBER = "966596240060";
+  const logoImage = new Image();\n  logoImage.src = "avera-logo.png";\n  const canvas = document.getElementById("reviewCanvas");
+  const ctx = canvas.getContext("2d");
+  const statusEl = document.getElementById("status");
+  let rating = 5;
+  let currentReview = {name:"عميل AVERA", service:"تجربة مع AVERA", text:"رأيك يصنع فرقًا. شكرًا لثقتك بنا!", rating:5};
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  }
+  function drawCard(data){
+    currentReview = data;
+    const W=canvas.width,H=canvas.height;
+    const bg=ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,"#090b27"); bg.addColorStop(.52,"#171044"); bg.addColorStop(1,"#08234b");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+    // Ambient glows
+    let glow=ctx.createRadialGradient(850,180,10,850,180,560);
+    glow.addColorStop(0,"rgba(121,43,255,.42)");glow.addColorStop(1,"rgba(121,43,255,0)");
+    ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+    glow=ctx.createRadialGradient(120,1110,10,120,1110,500);
+    glow.addColorStop(0,"rgba(40,123,255,.32)");glow.addColorStop(1,"rgba(40,123,255,0)");
+    ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+
+    // Border
+    const border=ctx.createLinearGradient(80,90,1000,1250);
+    border.addColorStop(0,"#bda2ff");border.addColorStop(.5,"#4d75ff");border.addColorStop(1,"#8f55ff");
+    ctx.strokeStyle=border;ctx.lineWidth=3;roundRect(46,46,988,1258,42);ctx.stroke();
+
+    // Official AVERA neon logo image
+    if (logoImage.complete && logoImage.naturalWidth) {
+      ctx.save();
+      ctx.shadowColor = "rgba(143,72,255,.55)";
+      ctx.shadowBlur = 28;
+      ctx.drawImage(logoImage, 455, 78, 170, 170);
+      ctx.restore();
+    } else {
+      const lg=ctx.createLinearGradient(465,90,615,235);lg.addColorStop(0,"#8d4bff");lg.addColorStop(1,"#236eff");
+      ctx.fillStyle=lg;roundRect(468,92,144,144,34);ctx.fill();
+      ctx.fillStyle="#fff";ctx.font="bold 100px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("A",540,163);
+    }
+    ctx.fillStyle="#fff";ctx.font="bold 48px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("AVERA",540,304);
+    ctx.fillStyle="#bfc4ff";ctx.font="26px Arial";ctx.fillText("YOUR EXPERIENCE MATTERS",540,355);
+
+    // Stars
+    ctx.fillStyle="#ffd77a";ctx.font="64px Arial";ctx.textAlign="center";
+    const starLine=Array.from({length:data.rating},()=>"★").join("  ");
+    ctx.fillText(starLine,540,475);
+
+    ctx.fillStyle="#d9d7ff";ctx.font="30px Arial";ctx.fillText("تقييم العميل",540,545);
+
+    // Quote card
+    ctx.fillStyle="rgba(8,10,34,.58)";roundRect(112,600,856,370,30);ctx.fill();
+    ctx.strokeStyle="rgba(174,151,255,.5)";ctx.lineWidth=2;roundRect(112,600,856,370,30);ctx.stroke();
+
+    ctx.fillStyle="#b9a2ff";ctx.font="bold 94px Georgia";ctx.textAlign="right";ctx.fillText("”",900,675);
+    ctx.fillStyle="#fff";ctx.font="36px Tahoma, Arial";ctx.textAlign="center";ctx.textBaseline="middle";
+    const lines=wrapText(data.text,39);
+    const maxLines=5;
+    const visible=lines.slice(0,maxLines);
+    const lineHeight=57;
+    let startY=760-(visible.length-1)*lineHeight/2;
+    visible.forEach((line,i)=>ctx.fillText(line,540,startY+i*lineHeight,760));
+
+    ctx.fillStyle="#fff";ctx.font="bold 34px Tahoma, Arial";ctx.fillText(data.name || "عميل AVERA",540,1045);
+    ctx.fillStyle="#aeb5ff";ctx.font="28px Tahoma, Arial";ctx.fillText(data.service,540,1100);
+
+    ctx.strokeStyle="rgba(183,162,255,.55)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(270,1160);ctx.lineTo(810,1160);ctx.stroke();
+    ctx.fillStyle="#e6dcff";ctx.font="28px Arial";ctx.fillText("شكرًا لثقتك بـ AVERA 💜",540,1215);
+    ctx.fillStyle="#8fa7ff";ctx.font="22px Arial";ctx.fillText("AVERA · Design your next possibility",540,1260);
+  }
+  function wrapText(text,maxChars){
+    const words=(text||"").trim().split(/\s+/); const lines=[];let line="";
+    for(const word of words){
+      const test=line?line+" "+word:word;
+      if(test.length>maxChars && line){lines.push(line);line=word;}else line=test;
+    }
+    if(line)lines.push(line);
+    return lines.length?lines:[""];
+  }
+  function updateStars(){
+    document.querySelectorAll(".star").forEach(btn=>{
+      const n=Number(btn.dataset.rating);
+      btn.classList.toggle("active",n<=rating);
+      btn.setAttribute("aria-pressed",String(n===rating));
+    });
+  }
+  document.querySelectorAll(".star").forEach(btn=>btn.addEventListener("click",()=>{
+    rating=Number(btn.dataset.rating);updateStars();
+  }));
+  document.getElementById("reviewForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const service=document.getElementById("service").value.trim();
+    const text=document.getElementById("reviewText").value.trim();
+    if(!service||!text){statusEl.textContent="أكملي اسم الخدمة والتقييم أولًا.";return;}
+    const name=document.getElementById("customerName").value.trim();
+    currentReview={name:name||"عميل AVERA",service,text,rating,consent:document.getElementById("publishConsent").checked};
+    drawCard(currentReview);
+    statusEl.textContent="تم إنشاء البطاقة. يمكنكِ تنزيلها أو مشاركتها.";
+  });
+  document.getElementById("downloadBtn").addEventListener("click",()=>{
+    const a=document.createElement("a");a.download="AVERA-review.png";a.href=canvas.toDataURL("image/png");a.click();
+    statusEl.textContent="بدأ تنزيل بطاقة التقييم بصيغة PNG.";
+  });
+  document.getElementById("shareBtn").addEventListener("click",async()=>{
+    canvas.toBlob(async blob=>{
+      const file=new File([blob],"AVERA-review.png",{type:"image/png"});
+      try{
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          await navigator.share({files:[file],title:"تقييمي لـ AVERA",text:"شكرًا AVERA 💜"});
+        }else{
+          const a=document.createElement("a");a.download="AVERA-review.png";a.href=URL.createObjectURL(blob);a.click();
+          statusEl.textContent="المشاركة المباشرة غير مدعومة في هذا المتصفح؛ تم تنزيل الصورة لتشاركيها يدويًا.";
+        }
+      }catch(err){if(err.name!=="AbortError")statusEl.textContent="تعذرت المشاركة. نزّلي الصورة وشاركيها يدويًا.";}
+    },"image/png");
+  });
+  document.getElementById("whatsappBtn").addEventListener("click",()=>{
+    const msg=`تقييم جديد لـ AVERA\nالخدمة: ${currentReview.service}\nالتقييم: ${"★".repeat(currentReview.rating)}\nالاسم: ${currentReview.name}\nالتقييم: ${currentReview.text}\nموافقة النشر: ${currentReview.consent?"نعم":"لا"}\n\nأرفقت/سأرفق صورة البطاقة يدويًا.`;
+    window.open(`https://wa.me/${AVERA_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
+    statusEl.textContent="فتح واتساب برسالة ملخص التقييم. لإرسال الصورة، أرفقي PNG بعد فتح المحادثة.";
+  });
+  drawCard(currentReview);
+  updateStars();
+</script>
+</body>
+</html>
