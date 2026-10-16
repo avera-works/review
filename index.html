@@ -14,7 +14,9 @@
     header.hero{position:relative;overflow:hidden;min-height:330px;border-radius:30px;margin:0 auto 26px;display:flex;align-items:center;justify-content:center;text-align:center;padding:36px 22px;background:linear-gradient(90deg,rgba(247,238,255,.83),rgba(235,223,255,.55)),url('avera-hero.png') center 43%/cover;border:1px solid #fff;box-shadow:0 20px 60px #8c6bd52b}
     header.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(247,240,255,.78),rgba(247,240,255,.08) 75%)}
     .hero-content{position:relative;z-index:1;max-width:660px}
-    .mark{display:inline-grid;place-items:center;width:58px;height:58px;border:1px solid #fff;border-radius:20px;color:white;font-size:30px;font-weight:800;box-shadow:0 0 28px #9b4dff55;background:linear-gradient(145deg,#a64cff,#5478ed)}
+    .brand-logo{display:block;width:76px;height:76px;object-fit:cover;border:1px solid #ffffffa8;border-radius:22px;box-shadow:0 0 30px #9b4dff45;margin:0 auto 10px;background:#090b27}
+    .brand-wordmark{font-weight:800;letter-spacing:3px;color:#fff;font-size:12px;margin-top:8px}
+    .action:focus-visible,.star:focus-visible{outline:3px solid #8d4bff;outline-offset:3px}
     h1{font-size:clamp(27px,4vw,42px);margin:13px 0 8px;letter-spacing:.4px;color:#402365;text-shadow:0 1px #fff}
     header p{color:#5c4a78;margin:0;line-height:1.9;font-size:16px}
     .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);gap:22px;align-items:start}
@@ -49,9 +51,9 @@
   <main class="wrap">
     <header class="hero">
       <div class="hero-content">
-        <div class="mark" aria-label="AVERA">A</div>
+        <img class="brand-logo" src="avera-logo.png" alt="شعار AVERA" width="76" height="76">
         <h1>AVERA Review Studio</h1>
-        <p>كل تجربة جميلة تستحق أن تُروى ✨<br>شاركنا رأيك، وأنشئ بطاقة تقييم مستوحاة من عالم AVERA البنفسجي.</p>
+        <p>كل تجربة جميلة تستحق أن تُروى ✨<br>شاركنا رأيك وشاركه بهوية AVERA البنفسجية والزرقاء.</p>
       </div>
     </header>
 
@@ -84,12 +86,10 @@
           </label>
 
           <div class="buttons">
-            <button class="action primary" type="submit">إنشاء بطاقة التقييم</button>
-            <button class="action secondary" id="downloadBtn" type="button">تنزيل البطاقة PNG</button>
             <button class="action secondary" id="shareBtn" type="button">مشاركة البطاقة</button>
-            <button class="action secondary" id="whatsappBtn" type="button">إرسال ملخص التقييم إلى واتساب AVERA</button>
+            <button class="action secondary" id="whatsappBtn" type="button">إرسال البطاقة والتقييم إلى واتساب AVERA</button>
           </div>
-          <p class="hint">بعد فتح واتساب، أرفقي صورة البطاقة التي تم تنزيلها لإرسالها مع التقييم.</p>
+          <p class="hint">في واتساب، ستُفتح رسالة التقييم ويُجهّز ملف البطاقة لإرفاقه يدويًا؛ أرفقي الصورة ثم اضغطي إرسال.</p>
         </form>
       </section>
 
@@ -99,7 +99,7 @@
           <span class="tag">1080 × 1350</span>
         </div>
         <canvas id="reviewCanvas" width="1080" height="1350" aria-label="معاينة بطاقة التقييم"></canvas>
-        <div class="status" id="status" aria-live="polite">اكتبي تقييمك ثم اضغطي «إنشاء بطاقة التقييم».</div>
+        <div class="status" id="status" aria-live="polite">اكتبي تقييمك، ثم اختاري «مشاركة البطاقة» أو «إرسال البطاقة والتقييم إلى واتساب AVERA».</div>
       </section>
     </div>
     <footer>AVERA · Design your next possibility<br>هذه نسخة أولية تعمل في المتصفح؛ لا تحفظ التقييمات على خادم.</footer>
@@ -112,7 +112,34 @@
   const ctx = canvas.getContext("2d");
   const statusEl = document.getElementById("status");
   let rating = 5;
-  let currentReview = {name:"عميل AVERA", service:"تجربة مع AVERA", text:"رأيك يصنع فرقًا. شكرًا لثقتك بنا!", rating:5};
+  let currentReview = {name:"", service:"", text:"", rating:5, consent:false};
+  const logoImage = new Image();
+  logoImage.src = "avera-logo.png";
+  logoImage.onload = () => { if (currentReview.service) drawCard(currentReview); };
+
+  function readReviewFromForm(){
+    const service = document.getElementById("service").value.trim();
+    const text = document.getElementById("reviewText").value.trim();
+    if (!service || !text) {
+      statusEl.textContent = "فضلاً اكتبي اسم الخدمة ورأيك قبل المتابعة.";
+      (!service ? document.getElementById("service") : document.getElementById("reviewText")).focus();
+      return null;
+    }
+    return {
+      name: document.getElementById("customerName").value.trim() || "عميل AVERA",
+      service,
+      text,
+      rating,
+      consent: document.getElementById("publishConsent").checked
+    };
+  }
+
+  function refreshCardFromForm(){
+    const review = readReviewFromForm();
+    if (!review) return null;
+    drawCard(review);
+    return review;
+  }
 
   function roundRect(x,y,w,h,r){
     ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
@@ -137,11 +164,18 @@
     border.addColorStop(0,"#bda2ff");border.addColorStop(.5,"#4d75ff");border.addColorStop(1,"#8f55ff");
     ctx.strokeStyle=border;ctx.lineWidth=3;roundRect(46,46,988,1258,42);ctx.stroke();
 
-    // Logo mark
-    const lg=ctx.createLinearGradient(465,90,615,235);lg.addColorStop(0,"#8d4bff");lg.addColorStop(1,"#236eff");
-    ctx.fillStyle=lg;roundRect(468,92,144,144,34);ctx.fill();
-    ctx.fillStyle="#fff";ctx.font="bold 100px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("A",540,163);
-    ctx.fillStyle="#fff";ctx.font="bold 48px Arial";ctx.fillText("AVERA",540,304);
+    // Official AVERA logo image (with graceful fallback if the file is missing)
+    if (logoImage.complete && logoImage.naturalWidth) {
+      ctx.save();
+      roundRect(465,82,150,150,30); ctx.clip();
+      ctx.drawImage(logoImage,465,82,150,150);
+      ctx.restore();
+    } else {
+      const lg=ctx.createLinearGradient(465,90,615,235);lg.addColorStop(0,"#8d4bff");lg.addColorStop(1,"#236eff");
+      ctx.fillStyle=lg;roundRect(468,92,144,144,34);ctx.fill();
+      ctx.fillStyle="#fff";ctx.font="bold 100px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("A",540,163);
+    }
+    ctx.fillStyle="#fff";ctx.font="bold 48px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("AVERA",540,304);
     ctx.fillStyle="#bfc4ff";ctx.font="26px Arial";ctx.fillText("YOUR EXPERIENCE MATTERS",540,355);
 
     // Stars
@@ -190,39 +224,54 @@
   document.querySelectorAll(".star").forEach(btn=>btn.addEventListener("click",()=>{
     rating=Number(btn.dataset.rating);updateStars();
   }));
-  document.getElementById("reviewForm").addEventListener("submit",e=>{
-    e.preventDefault();
-    const service=document.getElementById("service").value.trim();
-    const text=document.getElementById("reviewText").value.trim();
-    if(!service||!text){statusEl.textContent="أكملي اسم الخدمة والتقييم أولًا.";return;}
-    const name=document.getElementById("customerName").value.trim();
-    currentReview={name:name||"عميل AVERA",service,text,rating,consent:document.getElementById("publishConsent").checked};
-    drawCard(currentReview);
-    statusEl.textContent="تم إنشاء البطاقة. يمكنكِ تنزيلها أو مشاركتها.";
-  });
-  document.getElementById("downloadBtn").addEventListener("click",()=>{
-    const a=document.createElement("a");a.download="AVERA-review.png";a.href=canvas.toDataURL("image/png");a.click();
-    statusEl.textContent="بدأ تنزيل بطاقة التقييم بصيغة PNG.";
-  });
+  document.getElementById("reviewForm").addEventListener("submit",e=>e.preventDefault());
+
+  function downloadCurrentCard(blob){
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.download="AVERA-review.png";a.href=url;a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }
+  function canvasBlob(){
+    return new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+  }
+
   document.getElementById("shareBtn").addEventListener("click",async()=>{
-    canvas.toBlob(async blob=>{
-      const file=new File([blob],"AVERA-review.png",{type:"image/png"});
-      try{
-        if(navigator.canShare && navigator.canShare({files:[file]})){
-          await navigator.share({files:[file],title:"تقييمي لـ AVERA",text:"شكرًا AVERA 💜"});
-        }else{
-          const a=document.createElement("a");a.download="AVERA-review.png";a.href=URL.createObjectURL(blob);a.click();
-          statusEl.textContent="المشاركة المباشرة غير مدعومة في هذا المتصفح؛ تم تنزيل الصورة لتشاركيها يدويًا.";
-        }
-      }catch(err){if(err.name!=="AbortError")statusEl.textContent="تعذرت المشاركة. نزّلي الصورة وشاركيها يدويًا.";}
-    },"image/png");
+    if(!refreshCardFromForm()) return;
+    const blob=await canvasBlob();
+    if(!blob){statusEl.textContent="تعذر إنشاء الصورة. أعيدي المحاولة.";return;}
+    const file=new File([blob],"AVERA-review.png",{type:"image/png"});
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:"تقييمي لـ AVERA",text:`تقييمي لخدمة ${currentReview.service} لدى AVERA`});
+        statusEl.textContent="تم فتح خيارات مشاركة البطاقة.";
+      }else{
+        downloadCurrentCard(blob);
+        downloadCurrentCard(blob);
+        statusEl.textContent="المشاركة المباشرة للصور غير مدعومة في هذا المتصفح؛ جُهزت البطاقة لتتمكني من مشاركتها يدويًا.";
+      }
+    }catch(err){if(err.name!=="AbortError")statusEl.textContent="تعذرت المشاركة. نزّلي الصورة وشاركيها يدويًا.";}
   });
-  document.getElementById("whatsappBtn").addEventListener("click",()=>{
-    const msg=`تقييم جديد لـ AVERA\nالخدمة: ${currentReview.service}\nالتقييم: ${"★".repeat(currentReview.rating)}\nالاسم: ${currentReview.name}\nالتقييم: ${currentReview.text}\nموافقة النشر: ${currentReview.consent?"نعم":"لا"}\n\nأرفقت/سأرفق صورة البطاقة يدويًا.`;
-    window.open(`https://wa.me/${AVERA_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
-    statusEl.textContent="فتح واتساب برسالة ملخص التقييم. لإرسال الصورة، أرفقي PNG بعد فتح المحادثة.";
+
+  document.getElementById("whatsappBtn").addEventListener("click",async()=>{
+    const review=refreshCardFromForm();
+    if(!review) return;
+    const msg=`تقييم جديد لـ AVERA\nالخدمة: ${review.service}\nالتقييم: ${"★".repeat(review.rating)} (${review.rating}/5)\nالاسم: ${review.name}\nرأي العميل: ${review.text}\nموافقة النشر: ${review.consent?"نعم":"لا"}\n\nستُرفق صورة بطاقة التقييم مع هذه الرسالة.`;
+    const whatsappUrl=`https://wa.me/${AVERA_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    // Open WhatsApp synchronously from the click to reduce popup-blocker issues.
+    const win=window.open(whatsappUrl,"_blank");
+    if(win) win.opener=null;
+    const blob=await canvasBlob();
+    if(blob) downloadCurrentCard(blob);
+    statusEl.textContent=win ? "تم فتح محادثة واتساب AVERA وتجهيز ملف البطاقة. أرفقي ملف AVERA-review.png في المحادثة ثم أرسلي الرسالة." : "تم تجهيز ملف البطاقة. افتحي واتساب AVERA وأرفقي الصورة في المحادثة قبل الإرسال.";
   });
-  drawCard(currentReview);
+
+  // Keep the live preview synchronized while the customer edits the form.
+  ["customerName","service","reviewText","publishConsent"].forEach(id=>{
+    const el=document.getElementById(id);
+    el.addEventListener("input",()=>{ if(document.getElementById("service").value.trim() && document.getElementById("reviewText").value.trim()) refreshCardFromForm(); });
+    el.addEventListener("change",()=>{ if(document.getElementById("service").value.trim() && document.getElementById("reviewText").value.trim()) refreshCardFromForm(); });
+  });
+  drawCard({name:"اسم العميل",service:"اسم الخدمة",text:"ستظهر هنا كلمات العميل كما كتبها.",rating:5,consent:false});
   updateStars();
 </script>
 </body>
